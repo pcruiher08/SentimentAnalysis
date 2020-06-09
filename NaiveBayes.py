@@ -1,19 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import nltk
-import numpy as np
 import random
 import pickle
 from nltk.corpus import movie_reviews, stopwords
 from nltk.tokenize import word_tokenize
+from nltk import ngrams
 import string
-#from nltk.corpus import wordnet
-
-#To use NLTK with SkLearn
-from nltk.classify.scikitlearn import SklearnClassifier
-from sklearn.naive_bayes import MultinomialNB, GaussianNB, BernoulliNB
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.svm import SVC, LinearSVC, NuSVC
-from nltk.classify import ClassifierI
-from statistics import mode
 
 '''
 Combining Algorithms with NLTK to create our classifier
@@ -36,46 +29,89 @@ or negative connotations. Finally, we'll search for those words for whichever ha
 more positive or negative and that's how will classify.
 '''
 
-#List of tuples
-documents = [(list(movie_reviews.words(fileid)), category)
-            for category in movie_reviews.categories()
-            for fileid in movie_reviews.fileids(category)]
+'''
+CUSTOM DATASET GIVES BETTER PREDICTIONS RATHER THAN USING THE MOVIEW REVIEWS
+'''
 
-random.shuffle(documents)
+# Bag on NGrams feature
+# From: http://blog.chapagain.com.np/python-nltk-sentiment-analysis-on-movie-reviews-natural-language-processing-nlp/
 
-all_words_no_stopword = []
-for word in movie_reviews.words():
-    if word not in stopwords.words('english') and word not in string.punctuation:
-        all_words_no_stopword.append(word.lower()) # lowercase
+important_words = ['above', 'below', 'off', 'over', 'under', 'more', 'most', 
+                   'such', 'no', 'nor', 'not', 'only', 'so', 'than', 'too', 
+                   'very', 'just', 'but']
 
-all_words_no_stopword = nltk.FreqDist(all_words_no_stopword)
+# Comment when not using this dataset
+# 5532 each
+short_pos = open("reviews/positive.txt", encoding='latin-1').read()
+short_neg = open("reviews/negative.txt", encoding='latin-1').read()
 
-word_features = [word[0] for word in all_words_no_stopword.most_common(3000)]
+def clean_words(words, stopwords_language):
+    words_clean = []
+    for word in words:
+        word = word.lower()
+        if word not in stopwords_language and word not in string.punctuation:
+            words_clean.append(word)
+    return words_clean
 
-def find_features(document):
-    words = set(document) #Avoid duplicates
-    features = {}
-    for word in word_features:
-        features[word] = (word in words) #Boolean value if w in word_features is within the document
-    return features
+# for unigram
+def bag_of_words(words):
+    words_dictionary = dict([word, True] for word in words)
+    return words_dictionary
 
-# print((find_features(movie_reviews.words('neg/cv000_29416.txt'))))
-featuresets = [(find_features(review), category) for (review,category) in documents]
+# for ngram (bigrams)
+def bag_of_ngrams(words, n=2):
+    words_ng = []
+    for item in iter(ngrams(words,n)):
+        words_ng.append(item)
+    words_dictionary = dict([word, True] for word in words_ng)
+    #print(words_dictionary)
+    return words_dictionary
 
-training_set = featuresets[:1900]   # First 1900
-testing_set = featuresets[1900:]    # Last 100
+def bag_of_all_words(words, n=2):
+    stopwords_english = stopwords.words('english')
+    words_clean = clean_words(words, stopwords_english)
+    words_clean_brigram = clean_words(words, set(stopwords_english) - set(important_words))
 
-classifier = nltk.NaiveBayesClassifier.train(training_set)
-print("Classifier accuracy percent:",(nltk.classify.accuracy(classifier, testing_set))*100)
-classifier.show_most_informative_features(15)
+    unigram_features = bag_of_words(words_clean)
+    bigram_features = bag_of_ngrams(words_clean_brigram)
 
-custom_review = "I hated the film. It was a disaster. Poor direction, bad acting."
-custom_review_tokens = word_tokenize(custom_review)
-custom_review_set = find_features(custom_review_tokens)
-print (classifier.classify(custom_review_set))
+    all_features = unigram_features.copy()
+    all_features.update(bigram_features)
 
-custom_review = "It was a wonderful and amazing movie. I loved it. Best direction, good acting."
-custom_review_tokens = word_tokenize(custom_review)
-custom_review_set = find_features(custom_review_tokens)
- 
-print (classifier.classify(custom_review_set))
+    return all_features
+
+
+pos_reviews = []
+# for fileid in movie_reviews.fileids('pos'):
+#     pos_reviews.append(movie_reviews.words(fileid))
+for pos_review in short_pos.split('\n'):
+    pos_reviews.append(word_tokenize(pos_review)) 
+
+
+neg_reviews = []
+# for fileid in movie_reviews.fileids('neg'):
+#     neg_reviews.append(movie_reviews.words(fileid))
+for neg_review in short_neg.split('\n'):
+    neg_reviews.append(word_tokenize(neg_review)) 
+
+pos_review_set = []
+for words in pos_reviews:
+    pos_review_set.append((bag_of_all_words(words), 'pos'))
+
+neg_review_set = []
+for words in neg_reviews:
+    neg_review_set.append((bag_of_all_words(words), 'neg'))
+
+random.shuffle(pos_review_set)
+random.shuffle(neg_review_set)
+
+test_set = pos_review_set[:1066] + neg_review_set[:1066]
+train_set = pos_review_set[1066:] + neg_review_set[1066:]
+classifier = nltk.NaiveBayesClassifier.train(train_set)
+accuracy = nltk.classify.accuracy(classifier,test_set)
+print(accuracy)
+print(classifier.show_most_informative_features(15))
+
+save_classifier = open("pickled_algos/NaiveBayes_customdataset.pickle","wb")
+pickle.dump(classifier, save_classifier)
+save_classifier.close()
