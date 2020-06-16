@@ -3,8 +3,8 @@
 import nltk
 import pickle
 import random
-from nltk.tokenize import word_tokenize
-from Preprocessing import bag_of_all_words, preprocess
+
+from nltk.classify.scikitlearn import SklearnClassifier
 
 from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 
@@ -32,7 +32,7 @@ def load_content(path):
     return text
 
 def load_models():
-    classifier = open(".\pickled_algos\NaiveBayes_customdataset.pickle", "rb")
+    classifier = open(".\\pickled_algos\\NaiveBayes_customdataset.pickle", "rb")
     NB_NLTK = pickle.load(classifier)
     classifier.close()
 
@@ -54,33 +54,19 @@ def load_models():
 
     return NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser
 
-def predict_NLTK(model, text):
-    text = text[0]
-    if len(text) > 1:
-        custom_review_tokens = word_tokenize(text)
-        custom_review_set = bag_of_all_words(custom_review_tokens)
-
-        print(model.classify(custom_review_set))
-
-def predict_SKLearn(vectoriser, model, text):
-    # Predict the sentiment
-    preprocessed_text = ' '
-    preprocessed, _ = preprocess(text)
-    preprocessed_text = ' '.join([str(word) for word in preprocessed[0]])
-    textdata = vectoriser.transform(word_tokenize(preprocessed_text))
-    prediction = model.predict(textdata)
-    
-    print(prediction[0])
-
 def runModels(path):
-    NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser = load_models()
-    voted_classifier = VoteClassifier(NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser)
+    NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser = load_models()
+    voted_classifier = VoteClassifier(Vectoriser, NB_NLTK, Bernoulli_NB_Sklearn, LogReg, Multi_NB_Sklearn)
     content = load_content(path)
-    predict(Vectoriser, Multi_NB_Sklearn, content)
+    print(f'First comment: {content[0]}')
+    print(voted_classifier.classify(content))
+    print(voted_classifier.confidence(content))
 
 if __name__=="__main__":
     # Loading the models.
-    NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser = load_models()
+    NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser = load_models()
+    runModels("Comments/twitter.txt")
+
     
     # # Text to classify should be in a list.
     # text = ["I hate twitter"]
