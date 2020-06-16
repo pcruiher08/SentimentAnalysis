@@ -1,2 +1,3 @@
 langdetect
 pandas
+nltk
