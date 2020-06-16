@@ -46,4 +46,4 @@ def initVoice(counter):
 
 def initInputFile(counter):
     fileName = input("Insert the filename: \n")
-    #runModels(fileName)
+    runModels(fileName)
