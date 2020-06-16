@@ -65,7 +65,7 @@ def runModels(path):
 if __name__=="__main__":
     # Loading the models.
     NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser = load_models()
-    runModels("Comments/tweets.txt")
+    runModels("Comments/twitter.txt")
 
     
     # # Text to classify should be in a list.
