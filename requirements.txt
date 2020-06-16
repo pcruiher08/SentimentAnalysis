@@ -6,3 +6,5 @@ nltk
 config
 tweepy
 preprocessor
+SpeechRecognition
+pyaudio
