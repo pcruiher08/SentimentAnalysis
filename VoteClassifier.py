@@ -45,7 +45,7 @@ class VoteClassifier(ClassifierI):
             else:
                 v = self.predict_NLTK(model, comment)
                 votes.append(v)
-        votes.append(vader.analyze(comment)[1])
+        votes.append(vader.analyze(comment)[0])
         choice_votes = votes.count(mode(votes))
         conf = choice_votes / len(votes)
         return conf
