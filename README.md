@@ -11,3 +11,4 @@ this will install all the required dependencies for the compiler to run:
 
 ## Usage
 main.py -m < twitter|youtube|voice >
+main.py -m < twitter|youtube|voice > -c 100

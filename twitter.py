@@ -2,8 +2,6 @@
 Created on June 09, 2020
 @author: Mildred Gil Melchor
 '''
-import pymongo
-from pymongo import MongoClient
 from pprint import pprint
 import sys
 from config import *
@@ -26,8 +24,8 @@ class Tweets( ):
 
         api = tweepy.API(auth)
         
-        myStreamListener = MyStreamListener(num_tweets_to_grab=counter)  
-        myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
+        myStreamListener = MyStreamListener(num_tweets_to_grab=counter)
+        myStream         = tweepy.Stream(auth = api.auth, listener=myStreamListener)
         myStream.filter(track=terms)
 
 def isEnglish(sentence):
@@ -57,7 +55,6 @@ class MyStreamListener(tweepy.StreamListener):
             clean_text = p.clean( status._json["text"] )
 
             if isEnglish ( clean_text ):
-                print( status._json["text"] )
                 output = open("Comments/twitter.txt","a")
                 output.write(clean_text)
                 output.write('\n')

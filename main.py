@@ -1,10 +1,11 @@
 import sys, getopt
-from Method import call
+from Method import initMethod
+from plot import Plot
 
 def main(filename,argv):
     method = ''
-    counter = 100
-    #first we try to get aguments from the inline call
+    counter = 100 #default value
+    #first we try to get arguments from the inline call
     try:
         opts, args = getopt.getopt(argv,"m:c:h",["method=","counter=","help"])
     except getopt.GetoptError:
@@ -20,10 +21,10 @@ def main(filename,argv):
             method = arg
         elif opt in ("-c", "--counter"):
             counter = int(arg)
-    print(counter, method)
+    
     return method, counter
 
 if __name__ == '__main__':
     method, counter = main(sys.argv[0],sys.argv[1:])
-    call(method, counter)
-
+    #initMethod(method, counter)
+    Plot()

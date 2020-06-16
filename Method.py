@@ -2,7 +2,7 @@ from twitter import Tweets
 #from TestModels import runModels
 from Youtube_scraper import Youtube
 
-def call(method, counter):
+def initMethod(method, counter):
     #select twitter, youtube, voice, input file
     switch = {
         'twitter' : initTwitter,
