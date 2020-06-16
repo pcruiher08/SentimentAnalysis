@@ -8,10 +8,11 @@ def main(filename,argv):
         opts, args = getopt.getopt(argv,"m:h",["method=","help"])
     except getopt.GetoptError:
         print('usage: {} -m <method>'.format(filename))
+        print('usage: {} -m <twitter|youtube|voice>'.format(filename))
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('usage: {} -m <method>'.format(filename))
+            print('usage: {} -m <twitter|youtube|voice>'.format(filename))
             sys.exit()
         elif opt in ("-m", "--method"):
             method = arg
