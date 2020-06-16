@@ -22,7 +22,7 @@ def getTerms():
 def initTwitter(counter):
     """ Init Twitter API with specified terms and counter """
     t = Tweets(getTerms(), counter)
-    #runModels("Comments/twitter.txt")
+    runModels("Comments/twitter.txt")
 
 def initYoutube(counter):
     list_terms = getTerms()
@@ -48,4 +48,4 @@ def initVoice(counter):
 
 def initInputFile(counter):
     fileName = input("Insert the filename: \n")
-    #runModels(fileName)
+    runModels(fileName)

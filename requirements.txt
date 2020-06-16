@@ -3,6 +3,7 @@ pandas
 selenium
 matplotlib
 nltk
+vadersentiment
 config
 tweepy
 preprocessor

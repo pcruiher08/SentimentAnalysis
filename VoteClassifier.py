@@ -3,6 +3,7 @@ from nltk.classify import ClassifierI
 from nltk.tokenize import word_tokenize
 from Preprocessing import bag_of_all_words, preprocess
 from statistics import mode #for the votes
+import vader
 
 class VoteClassifier(ClassifierI):
     def __init__(self, vectoriser, *classifiers):
@@ -12,6 +13,7 @@ class VoteClassifier(ClassifierI):
     def predict_NLTK(self, model, text):
         custom_review_tokens = word_tokenize(text)
         custom_review_set = bag_of_all_words(custom_review_tokens)
+        print("predict NLTK",model.classify(custom_review_set))
         return  model.classify(custom_review_set)
 
     def predict_SKLearn(self, vectoriser, model, text):
@@ -21,6 +23,7 @@ class VoteClassifier(ClassifierI):
         preprocessed_text = ' '.join([str(word) for word in preprocessed])
         textdata = vectoriser.transform(word_tokenize(preprocessed_text))
         prediction = model.predict(textdata)
+        print("predict SKLEARN",prediction)
         return prediction[0]
 
     def classify(self, comment):
@@ -32,6 +35,7 @@ class VoteClassifier(ClassifierI):
             else:
                 v = self.predict_NLTK(model, comment)
                 votes.append(v)
+        votes.append(vader.analyze(comment)[0])
         return mode(votes)
         
     def confidence(self, comment):
@@ -43,6 +47,7 @@ class VoteClassifier(ClassifierI):
             else:
                 v = self.predict_NLTK(model, comment)
                 votes.append(v)
+        votes.append(vader.analyze(comment)[0])
         choice_votes = votes.count(mode(votes))
         conf = choice_votes / len(votes)
         return conf

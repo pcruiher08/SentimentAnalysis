@@ -72,7 +72,7 @@ def runModels(path):
             sentiment_value, confidence = sentiment(sentence, voted_classifier)
             print(sentiment_value)
             print(confidence)
-            if confidence* 100 > 70:
+            if confidence* 100 > 0:
                 output = open("results.txt","a")
                 output.write(sentiment_value + ' : ')
                 output.write(sentence)
