@@ -58,7 +58,7 @@ def predict_NLTK(model, text):
 
         print(model.classify(custom_review_set))
 
-def predict(vectoriser, model, text):
+def predict_SKLearn(vectoriser, model, text):
     # Predict the sentiment
     preprocessed_text = ' '
     preprocessed, _ = preprocess(text)
@@ -72,6 +72,7 @@ def runModels(path):
     NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser = load_models()
     voted_classifier = VoteClassifier(NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser)
     content = load_content(path)
+    predict(Vectoriser, Multi_NB_Sklearn, content)
 
 if __name__=="__main__":
     # Loading the models.
