@@ -3,3 +3,6 @@ pandas
 selenium
 matplotlib
 nltk
+config
+tweepy
+preprocessor
