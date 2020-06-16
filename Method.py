@@ -1,4 +1,5 @@
 from twitter import Tweets
+from TestModels import runModels
 from Youtube_scraper import Youtube
 
 def call(method):
@@ -11,13 +12,14 @@ def call(method):
 
     methodCall = switch.get(method)
     methodCall(list_terms)
+    runModels("Comments/" + method + ".txt")
 
 def getTerms():
     x = input ("insert terms:")
     return x.split(' ')
 
 def initTwitter(list_terms):
-    print(list_terms)
+     """ Init Twitter API with specified terms. """
     t = Tweets(list_terms)
 
 def initYoutube(list_terms):
