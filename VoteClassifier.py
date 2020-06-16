@@ -13,7 +13,7 @@ class VoteClassifier(ClassifierI):
     def predict_NLTK(self, model, text):
         custom_review_tokens = word_tokenize(text)
         custom_review_set = bag_of_all_words(custom_review_tokens)
-        print("predict NLTK",model.classify(custom_review_set))
+        # print("predict NLTK",model.classify(custom_review_set))
         return  model.classify(custom_review_set)
 
     def predict_SKLearn(self, vectoriser, model, text):
@@ -23,7 +23,7 @@ class VoteClassifier(ClassifierI):
         preprocessed_text = ' '.join([str(word) for word in preprocessed])
         textdata = vectoriser.transform(word_tokenize(preprocessed_text))
         prediction = model.predict(textdata)
-        print("predict SKLEARN",prediction)
+        # print("predict SKLEARN",prediction)
         return prediction[0]
 
     def classify(self, comment):

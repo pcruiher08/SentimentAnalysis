@@ -8,6 +8,3 @@ def analyze(comment):
     classification =  'neg' if confidence < 0.5 else 'pos' 
     #print(classification,confidence)
     return classification,confidence
-
-
-print(analyze('i love you'))
