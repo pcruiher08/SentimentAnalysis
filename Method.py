@@ -3,25 +3,34 @@ from twitter import Tweets
 from Youtube_scraper import Youtube
 
 def call(method, counter):
-    list_terms = getTerms()
-    #select twitter, youtube, voice 
+    #select twitter, youtube, voice, input file
     switch = {
         'twitter' : initTwitter,
-        'youtube' : initYoutube
+        'youtube' : initYoutube,
+        'voice'   : initVoice,
+        'file'    : initInputFile
     }
 
     methodCall = switch.get(method)
-    methodCall(list_terms, counter)
-    #runModels("Comments/" + method + ".txt")
+    methodCall(counter)
 
 def getTerms():
     x = input ("insert terms:")
     return x.split(' ')
 
-def initTwitter(list_terms, counter):
+def initTwitter(counter):
     """ Init Twitter API with specified terms and counter """
-    t = Tweets(list_terms, counter)
+    t = Tweets(getTerms(), counter)
+    #runModels("Comments/twitter.txt")
 
-def initYoutube(list_terms, counter):
+def initYoutube(counter):
+    list_terms = getTerms()
     print(list_terms)
     t = Youtube(list_terms)
+
+def initVoice(counter):
+    pass
+
+def initInputFile(counter):
+    fileName = input("Insert the filename: \n")
+    #runModels(fileName)
