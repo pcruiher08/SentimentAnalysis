@@ -25,7 +25,7 @@ def load_tweets():
     return tweets
 
 def load_models():
-    classifier = open("./pickled_algos/NaiveBayes_customdataset.pickle", "rb")
+    classifier = open(".\pickled_algos\NaiveBayes_customdataset.pickle", "rb")
     NB_NLTK = pickle.load(classifier)
     classifier.close()
 
@@ -36,12 +36,16 @@ def load_models():
     classifier = open(".\pickled_algos\Multinomial_NB.pickle", "rb")
     Multi_NB_Sklearn = pickle.load(classifier)
     classifier.close()
+
+    classifier = open(".\pickled_algos\LogisticRegression.pickle", "rb")
+    LogReg = pickle.load(classifier)
+    classifier.close()
     
     classifier = open(".\pickled_algos\Vectoriser.pickle", "rb")
     Vectoriser = pickle.load(classifier)
     classifier.close()
 
-    return NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser
+    return NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser
 
 def predict_NLTK(model, text):
     text = text[0]

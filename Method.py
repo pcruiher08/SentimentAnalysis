@@ -1,4 +1,5 @@
 from twitter import Tweets
+from Youtube_scraper import Youtube
 
 def call(method):
     list_terms = getTerms()
@@ -20,4 +21,5 @@ def initTwitter(list_terms):
     t = Tweets(list_terms)
 
 def initYoutube(list_terms):
-    pass
+    print(list_terms)
+    t = Youtube(list_terms)

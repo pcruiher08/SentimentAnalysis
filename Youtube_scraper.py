@@ -2,8 +2,6 @@
 Victor Sebastian Martinez
 Youtube comment scraper
 
-Usage: python <search_term> <number_of_comments>
-
 For preprocessing:
 https://towardsdatascience.com/nlp-for-beginners-cleaning-preprocessing-text-data-ae8e306bef0f
 
@@ -24,69 +22,85 @@ from nltk.stem import WordNetLemmatizer
 from selenium import webdriver
 from langdetect import detect
 
-def remove_emoji(string):
-    emoji_pattern = re.compile(
-        "["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-        u"\U00002702-\U000027B0"
-        u"\U000024C2-\U0001F251"
-        "]+", flags=re.UNICODE)
-    return emoji_pattern.sub(r'', string)
+class Youtube():
+    def __init__(self, terms):
+        self.driver = webdriver.Firefox()
+        self.search_terms = terms[0]
+        self.desired_comments = 0
 
-def isEnglish(sentence):
-    return detect(sentence) == 'en'
+        # Create directories
+        # to_search = sys.argv[1]
+        # cwd = os.getcwd()
+        # absolute_test_dir = os.path.join(cwd, "Comments/")
+        # try:
+        #     os.makedirs(absolute_test_dir, exist_ok=True)
+        # except OSError:
+        #         print(f"Creation of {absolute_test_dir} directory failed")
+    
+    def search_video():
+        # Search for a video
+        driver.get("https://www.youtube.com/results?search_query=" + to_search)
+        Video = driver.find_element_by_xpath("//div[@class='text-wrapper style-scope ytd-video-renderer']")
+        Video.click()
+        time.sleep(3)
 
-def clean_comments(raw_comments):
-    cleansed_comments = []
-    for comment in raw_comments:
-        if isEnglish(comment.text) and comment.text is not '' or comment.text is not ' ':
-            clean_comment = remove_emoji(comment.text)
-            cleansed_comments.append(clean_comment)
-    return  cleansed_comments
+        # Search for comments
+        desired_comments = int(sys.argv[2])
+        comments = []
+        # comment_section = driver.find_element_by_xpath('//*[@id="comments"]')
+        MAX_COMMENTS = driver.find_element_by_xpath('//*[@class="count-text style-scope ytd-comments-header-renderer"]')
+        MAX_COMMENTS = int(MAX_COMMENTS.text.split()[0].replace(",", ""))
 
-driver = webdriver.Firefox()
+        # Scroll down until desired number of comments are reached
+        desired_comments = MAX_COMMENTS if desired_comments > MAX_COMMENTS else desired_comments
+        while desired_comments > len(comments):
+            driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
+            time.sleep(3)
+            comments = driver.find_elements_by_xpath('//*[@id="content-text"]')
 
-# Create directories
-to_search = sys.argv[1]
-cwd = os.getcwd()
-absolute_test_dir = os.path.join(cwd, "Comments/")
+        # Preprocess and save
+        stop_words = stopwords.words('english')
+        tokenizer = RegexpTokenizer(r"\w+(?:[-']\w+)*|'|[-.(]+|\S\w*") # \w - Any character, + - match one or more
+        lemmatizer = WordNetLemmatizer()
 
-try:
-    os.makedirs(absolute_test_dir, exist_ok=True)
-except OSError:
-        print(f"Creation of {absolute_test_dir} directory failed")
+        with open(absolute_test_dir + to_search + '.txt', 'w') as f:
+            comments = clean_comments(comments)
+            for cmt in range(desired_comments):
+                comment = comments[cmt]
+                f.write(comment + '\n')
+        driver.quit()
 
-# Search for a video
-driver.get("https://www.youtube.com/results?search_query=" + to_search)
-Video = driver.find_element_by_xpath("//div[@class='text-wrapper style-scope ytd-video-renderer']")
-Video.click()
-time.sleep(3)
+    def isEnglish(sentence):
+        return detect(sentence) == 'en'
 
-# Search for comments
-desired_comments = int(sys.argv[2])
-comments = []
-# comment_section = driver.find_element_by_xpath('//*[@id="comments"]')
-MAX_COMMENTS = driver.find_element_by_xpath('//*[@class="count-text style-scope ytd-comments-header-renderer"]')
-MAX_COMMENTS = int(MAX_COMMENTS.text.split()[0].replace(",", ""))
+    def remove_emoji(string):
+        emoji_pattern = re.compile(
+            "["
+            u"\U0001F600-\U0001F64F"  # emoticons
+            u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+            u"\U0001F680-\U0001F6FF"  # transport & map symbols
+            u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+            u"\U00002702-\U000027B0"
+            u"\U000024C2-\U0001F251"
+            "]+", flags=re.UNICODE)
+        return emoji_pattern.sub(r'', string)
 
-# Scroll down until desired number of comments are reached
-desired_comments = MAX_COMMENTS if desired_comments > MAX_COMMENTS else desired_comments
-while desired_comments > len(comments):
-    driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
-    time.sleep(3)
-    comments = driver.find_elements_by_xpath('//*[@id="content-text"]')
+    def clean_comments(raw_comments):
+        cleansed_comments = []
+        for comment in raw_comments:
+            if isEnglish(comment.text) and comment.text is not '' or comment.text is not ' ':
+                clean_comment = remove_emoji(comment.text)
+                cleansed_comments.append(clean_comment)
+        return  cleansed_comments
 
-# Preprocess and save
-stop_words = stopwords.words('english')
-tokenizer = RegexpTokenizer(r"\w+(?:[-']\w+)*|'|[-.(]+|\S\w*") # \w - Any character, + - match one or more
-lemmatizer = WordNetLemmatizer()
 
-with open(absolute_test_dir + to_search + '.txt', 'w') as f:
-    comments = clean_comments(comments)
-    for cmt in range(desired_comments):
-        comment = comments[cmt]
-        f.write(comment + '\n')
-driver.quit()
+
+
+
+
+
+
+
+
+
+
