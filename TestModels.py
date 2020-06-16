@@ -12,12 +12,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import confusion_matrix, classification_report
 
-def load_text():
-    youtube_comments = open("Comments/Starlink.txt", "r").read().split('\n')
+def load_youtube_comments():
+    youtube_comments = open("Comments/Starlink.txt", "r", encoding="utf8").read().split('\n')
     random.shuffle(youtube_comments)
-    youtube_comments.close()
 
-    return  youtube_comments
+    return youtube_comments
+
+def load_tweets():
+    tweets = open("Comments/tweets.txt", "r", encoding="utf8").read().split('\n')
+    random.shuffle(tweets)
+
+    return tweets
 
 def load_models():
     classifier = open("./pickled_algos/NaiveBayes_customdataset.pickle", "rb")
@@ -41,16 +46,13 @@ def load_models():
 def predict_NLTK(model, text):
     text = text[0]
     if len(text) > 1:
-        print(type(text))
-        print(text)
         custom_review_tokens = word_tokenize(text)
-        print(custom_review_tokens)
         custom_review_set = bag_of_all_words(custom_review_tokens)
 
         print(model.classify(custom_review_set))
-        prob_result = model.prob_classify(text[0])
-        print (prob_result.prob("neg")) 
-        print (prob_result.prob("pos")) 
+        # prob_result = model.prob_classify(custom_review_set)
+        # print (prob_result.prob("neg")) 
+        # print (prob_result.prob("pos")) 
 
 def predict(vectoriser, model, text):
     # Predict the sentiment
@@ -66,19 +68,26 @@ if __name__=="__main__":
     # Loading the models.
     NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, Vectoriser = load_models()
     
-    # Text to classify should be in a list.
-    text = ["I hate twitter"]
-    
+    # # Text to classify should be in a list.
+    # text = ["I hate twitter"]
+
+    youtube_comments = load_youtube_comments()
+    print(f'\nYoutube comment:\n {youtube_comments[0]}')
     print('Multinomial Naive Bayes')
-    predict(Vectoriser, Multi_NB_Sklearn, text)
-
+    predict(Vectoriser, Multi_NB_Sklearn, youtube_comments)
     print('Bernoulli Naive Bayes')
-    predict(Vectoriser, Bernoulli_NB_Sklearn, text)
-
+    predict(Vectoriser, Bernoulli_NB_Sklearn, youtube_comments)
     print('Naive Bayes NLTK')
-    predict_NLTK(NB_NLTK, text)
+    predict_NLTK(NB_NLTK, youtube_comments)
 
-
+    tweets = load_tweets()
+    print(f'\nTweet:\n {tweets[0]}')
+    print('Multinomial Naive Bayes')
+    predict(Vectoriser, Multi_NB_Sklearn, tweets)
+    print('Bernoulli Naive Bayes')
+    predict(Vectoriser, Bernoulli_NB_Sklearn, tweets)
+    print('Naive Bayes NLTK')
+    predict_NLTK(NB_NLTK, tweets)
 
 
 
