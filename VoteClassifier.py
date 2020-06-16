@@ -29,9 +29,9 @@ class VoteClassifier(ClassifierI):
         prediction = model.predict(textdata)
         # print(text)
         # print(f'len{len(prediction)}')
-        # print(prediction)
+        print(prediction)
         # print("predict SKLEARN",prediction)
-        return prediction
+        return prediction[0]
 
     def classify(self, comment):
         votes = []
