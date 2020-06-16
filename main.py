@@ -26,5 +26,5 @@ def main(filename,argv):
 
 if __name__ == '__main__':
     method, counter = main(sys.argv[0],sys.argv[1:])
-    #initMethod(method, counter)
+    initMethod(method, counter)
     Plot()

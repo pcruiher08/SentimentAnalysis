@@ -1,6 +1,7 @@
 from twitter import Tweets
 #from TestModels import runModels
 from Youtube_scraper import Youtube
+import speech_recognition as sr
 
 def initMethod(method, counter):
     #select twitter, youtube, voice, input file
@@ -29,7 +30,19 @@ def initYoutube(counter):
     t = Youtube(list_terms)
 
 def initVoice(counter):
-    pass
+    r = sr.Recognizer()
+
+    with sr.Microphone() as source:
+        print('Speak Anything: ')
+        audio = r.listen(source)
+    try:
+        t = r.recognize_google(audio)
+        output = open('./Comments/voicetext.txt', 'w')
+        output.write(t)
+        output.close()
+        # runModels("./Comments/voicetext.txt")
+    except:
+        print('Sorry could not recognize your voice')
 
 def initInputFile(counter):
     fileName = input("Insert the filename: \n")
