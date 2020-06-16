@@ -1,5 +1,5 @@
 from twitter import Tweets
-#from TestModels import runModels
+from TestModels import runModels
 from Youtube_scraper import Youtube
 import speech_recognition as sr
 
@@ -22,7 +22,7 @@ def getTerms():
 def initTwitter(counter):
     """ Init Twitter API with specified terms and counter """
     t = Tweets(getTerms(), counter)
-    #runModels("Comments/twitter.txt")
+    runModels("Comments/twitter.txt")
 
 def initYoutube(counter):
     list_terms = getTerms()
