@@ -58,9 +58,29 @@ def runModels(path):
     NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser = load_models()
     voted_classifier = VoteClassifier(Vectoriser, NB_NLTK, Bernoulli_NB_Sklearn, LogReg, Multi_NB_Sklearn)
     content = load_content(path)
-    print(f'First comment: {content[0]}')
-    print(voted_classifier.classify(content))
-    print(voted_classifier.confidence(content))
+    # print(f'First comment: {content[0]}')
+    # print(voted_classifier.classify(content))
+    # print(voted_classifier.confidence(content))
+    
+    #clean file
+    output = open("results.txt","w")
+    output.write('')
+    output.close()
+
+    for sentence in content:
+        if len(sentence) > 1:
+            sentiment_value, confidence = sentiment(sentence, voted_classifier)
+            # print(sentiment_value)
+            # print(confidence)
+            if confidence* 100 > 70:
+                output = open("results.txt","a")
+                output.write(sentiment_value + ' : ')
+                output.write(sentence)
+                output.write('\n')
+                output.close()
+
+def sentiment(sentence, voted_classifier):
+    return voted_classifier.classify(sentence), voted_classifier.confidence(sentence)
 
 if __name__=="__main__":
     # Loading the models.
