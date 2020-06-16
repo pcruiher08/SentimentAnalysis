@@ -23,19 +23,10 @@ from selenium import webdriver
 from langdetect import detect
 
 class Youtube():
-    def __init__(self, terms):
+    def __init__(self, terms, comments):
         self.driver = webdriver.Firefox()
-        self.search_terms = terms[0]
-        self.desired_comments = 0
-
-        # Create directories
-        # to_search = sys.argv[1]
-        # cwd = os.getcwd()
-        # absolute_test_dir = os.path.join(cwd, "Comments/")
-        # try:
-        #     os.makedirs(absolute_test_dir, exist_ok=True)
-        # except OSError:
-        #         print(f"Creation of {absolute_test_dir} directory failed")
+        self.search_terms = terms
+        self.desired_comments = comments
     
     def search_video():
         # Search for a video
@@ -44,16 +35,15 @@ class Youtube():
         Video.click()
         time.sleep(3)
 
-        # Search for comments
-        desired_comments = int(sys.argv[2])
         comments = []
         # comment_section = driver.find_element_by_xpath('//*[@id="comments"]')
         MAX_COMMENTS = driver.find_element_by_xpath('//*[@class="count-text style-scope ytd-comments-header-renderer"]')
         MAX_COMMENTS = int(MAX_COMMENTS.text.split()[0].replace(",", ""))
 
+        self.desired_comments = MAX_COMMENTS if self.desired_comments > MAX_COMMENTS else self.desired_comments
+
         # Scroll down until desired number of comments are reached
-        desired_comments = MAX_COMMENTS if desired_comments > MAX_COMMENTS else desired_comments
-        while desired_comments > len(comments):
+        while self.desired_comments > len(comments):
             driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
             time.sleep(3)
             comments = driver.find_elements_by_xpath('//*[@id="content-text"]')
@@ -65,7 +55,7 @@ class Youtube():
 
         with open(absolute_test_dir + to_search + '.txt', 'w') as f:
             comments = clean_comments(comments)
-            for cmt in range(desired_comments):
+            for cmt in range(self.desired_comments):
                 comment = comments[cmt]
                 f.write(comment + '\n')
         driver.quit()

@@ -70,8 +70,8 @@ def runModels(path):
     for sentence in content:
         if len(sentence) > 1:
             sentiment_value, confidence = sentiment(sentence, voted_classifier)
-            # print(sentiment_value)
-            # print(confidence)
+            print(sentiment_value)
+            print(confidence)
             if confidence* 100 > 70:
                 output = open("results.txt","a")
                 output.write(sentiment_value + ' : ')
@@ -82,6 +82,7 @@ def runModels(path):
 def sentiment(sentence, voted_classifier):
     return voted_classifier.classify(sentence), voted_classifier.confidence(sentence)
 
+'''
 if __name__=="__main__":
     # Loading the models.
     NB_NLTK, Bernoulli_NB_Sklearn, Multi_NB_Sklearn, LogReg, Vectoriser = load_models()
@@ -90,7 +91,7 @@ if __name__=="__main__":
     
     # # Text to classify should be in a list.
     # text = ["I hate twitter"]
-    '''
+    
     youtube_comments = load_youtube_comments()
     print(f'\nYoutube comment:\n {youtube_comments[0]}')
     print('Multinomial Naive Bayes')

@@ -4,3 +4,8 @@ selenium
 matplotlib
 nltk
 vadersentiment
+config
+tweepy
+preprocessor
+SpeechRecognition
+pyaudio
