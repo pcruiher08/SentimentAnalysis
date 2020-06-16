@@ -19,10 +19,17 @@ class VoteClassifier(ClassifierI):
     def predict_SKLearn(self, vectoriser, model, text):
         # Predict the sentiment
         preprocessed_text = ' '
+        # print(type(text))
         preprocessed, _ = preprocess([text])
         preprocessed_text = ' '.join([str(word) for word in preprocessed])
-        textdata = vectoriser.transform(word_tokenize(preprocessed_text))
+        preprocessed_text = [preprocessed_text]
+        # print(f'preprocessedtext: {preprocessed_text}')
+        # print(type(preprocessed_text))
+        textdata = vectoriser.transform(preprocessed_text)
         prediction = model.predict(textdata)
+        # print(text)
+        # print(f'len{len(prediction)}')
+        # print(prediction)
         # print("predict SKLEARN",prediction)
         return prediction[0]
 
