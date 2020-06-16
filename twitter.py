@@ -12,7 +12,7 @@ import preprocessor as p
 from langdetect import detect
 
 class Tweets( ):
-    def __init(self, terms):
+    def __init__(self, terms):
         '''
         OAUTH
         '''
@@ -28,7 +28,7 @@ class Tweets( ):
         
         myStreamListener = MyStreamListener()   
         myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-        myStream.filter(track=track) #myStream.filter(track=track, is_async=True)
+        myStream.filter(track=terms) #myStream.filter(track=track, is_async=True)
 
 def isEnglish(sentence):
     return detect(sentence) == 'en'
