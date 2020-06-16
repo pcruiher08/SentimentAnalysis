@@ -8,7 +8,9 @@ class VoteClassifier(ClassifierI):
     def classify(self, features):
         votes = []
         for c in self._classifiers:
+            # si es el de bayes
             v = c.classify(features)
+            # si no predict SKLearn
             votes.append(v)
         return mode(votes)
         

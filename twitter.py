@@ -12,7 +12,7 @@ import preprocessor as p
 from langdetect import detect
 
 class Tweets( ):
-    def __init__(self, terms):
+    def __init__(self, terms, counter):
         '''
         OAUTH
         '''
@@ -26,28 +26,43 @@ class Tweets( ):
 
         api = tweepy.API(auth)
         
-        myStreamListener = MyStreamListener()   
+        myStreamListener = MyStreamListener(num_tweets_to_grab=counter)  
         myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
-        myStream.filter(track=terms) #myStream.filter(track=track, is_async=True)
+        myStream.filter(track=terms)
 
 def isEnglish(sentence):
     return detect(sentence) == 'en'
 
 class MyStreamListener(tweepy.StreamListener):
+    def __init__(self, num_tweets_to_grab, api=None):
+        super(MyStreamListener, self).__init__()
+
+        #clean file
+        output = open("Comments/twitter.txt","w")
+        output.write('')
+        output.close()
+
+        self.counter = 0
+        self.num_tweets_to_grab = num_tweets_to_grab
+
     def on_connect(self):
         # Called initially to connect to the Streaming API
         print("You are now connected to the streaming API.")
 
     def on_status(self, status):
+        if self.counter > self.num_tweets_to_grab:
+            return False
+
         try:
-            print( status._json["text"] )
             clean_text = p.clean( status._json["text"] )
 
             if isEnglish ( clean_text ):
-                output = open("tweets.txt","a")
+                print( status._json["text"] )
+                output = open("Comments/twitter.txt","a")
                 output.write(clean_text)
                 output.write('\n')
                 output.close()
+                self.counter += 1
         except:
             pass
    
