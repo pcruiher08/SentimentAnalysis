@@ -31,7 +31,7 @@ class VoteClassifier(ClassifierI):
         # print(f'len{len(prediction)}')
         # print(prediction)
         # print("predict SKLEARN",prediction)
-        return prediction[0]
+        return prediction
 
     def classify(self, comment):
         votes = []
