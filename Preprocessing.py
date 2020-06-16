@@ -143,7 +143,7 @@ def bag_of_ngrams(words, n=2):
 def bag_of_all_words(words, n=2):
     stopwords_english = stopwords.words('english')
     words_clean, _ = clean_words(words, stopwords_english)
-    words_clean_brigram = clean_words(words, set(stopwords_english) - set(important_words))
+    words_clean_brigram, _ = clean_words(words, set(stopwords_english) - set(important_words))
 
     unigram_features = bag_of_words(words_clean)
     bigram_features = bag_of_ngrams(words_clean_brigram)
