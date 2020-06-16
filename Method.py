@@ -1,5 +1,5 @@
 from twitter import Tweets
-#from TestModels import runModels
+from TestModels import runModels
 from Youtube_scraper import Youtube
 import speech_recognition as sr
 
@@ -27,7 +27,9 @@ def initTwitter(counter):
 def initYoutube(counter):
     list_terms = getTerms()
     print(list_terms)
-    t = Youtube(list_terms)
+    t = Youtube(list_terms, counter)
+    t.search_video()
+    runModels("Comments/youtube.txt")
 
 def initVoice(counter):
     r = sr.Recognizer()

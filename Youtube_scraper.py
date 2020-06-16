@@ -24,46 +24,17 @@ from langdetect import detect
 
 class Youtube():
     def __init__(self, terms, comments):
-        self.driver = webdriver.Firefox()
-        self.search_terms = terms
+        self.driver = webdriver.Firefox(executable_path=r'.\geckodriver\geckodriver.exe')
+        self.search_terms = str(terms[0])
         self.desired_comments = comments
-    
-    def search_video():
-        # Search for a video
-        driver.get("https://www.youtube.com/results?search_query=" + to_search)
-        Video = driver.find_element_by_xpath("//div[@class='text-wrapper style-scope ytd-video-renderer']")
-        Video.click()
-        time.sleep(3)
 
-        comments = []
-        # comment_section = driver.find_element_by_xpath('//*[@id="comments"]')
-        MAX_COMMENTS = driver.find_element_by_xpath('//*[@class="count-text style-scope ytd-comments-header-renderer"]')
-        MAX_COMMENTS = int(MAX_COMMENTS.text.split()[0].replace(",", ""))
+    def isEnglish(self, sentence):
+        try:
+            return detect(sentence) == 'en'
+        except:
+            return False
 
-        self.desired_comments = MAX_COMMENTS if self.desired_comments > MAX_COMMENTS else self.desired_comments
-
-        # Scroll down until desired number of comments are reached
-        while self.desired_comments > len(comments):
-            driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
-            time.sleep(3)
-            comments = driver.find_elements_by_xpath('//*[@id="content-text"]')
-
-        # Preprocess and save
-        stop_words = stopwords.words('english')
-        tokenizer = RegexpTokenizer(r"\w+(?:[-']\w+)*|'|[-.(]+|\S\w*") # \w - Any character, + - match one or more
-        lemmatizer = WordNetLemmatizer()
-
-        with open(absolute_test_dir + to_search + '.txt', 'w') as f:
-            comments = clean_comments(comments)
-            for cmt in range(self.desired_comments):
-                comment = comments[cmt]
-                f.write(comment + '\n')
-        driver.quit()
-
-    def isEnglish(sentence):
-        return detect(sentence) == 'en'
-
-    def remove_emoji(string):
+    def remove_emoji(self,string):
         emoji_pattern = re.compile(
             "["
             u"\U0001F600-\U0001F64F"  # emoticons
@@ -75,13 +46,48 @@ class Youtube():
             "]+", flags=re.UNICODE)
         return emoji_pattern.sub(r'', string)
 
-    def clean_comments(raw_comments):
+    def clean_comments(self, raw_comments):
         cleansed_comments = []
         for comment in raw_comments:
-            if isEnglish(comment.text) and comment.text is not '' or comment.text is not ' ':
-                clean_comment = remove_emoji(comment.text)
+            if self.isEnglish(comment.text) and comment.text != '' or comment.text != ' ':
+                clean_comment = self.remove_emoji(comment.text)
                 cleansed_comments.append(clean_comment)
         return  cleansed_comments
+    
+    def search_video(self):
+        # Search for a video
+        self.driver.get("https://www.youtube.com/results?search_query=" + self.search_terms)
+        Video = self.driver.find_element_by_xpath("//div[@class='text-wrapper style-scope ytd-video-renderer']")
+        Video.click()
+        time.sleep(3)
+
+        comments = []
+        # comment_section = self.driver.find_element_by_xpath('//*[@id="comments"]')
+        self.driver.execute_script("window.scrollTo(0, 500)")
+        time.sleep(3)
+
+        MAX_COMMENTS = self.driver.find_element_by_xpath("//*[@class='count-text style-scope ytd-comments-header-renderer']")
+        MAX_COMMENTS = int(MAX_COMMENTS.text.split()[0].replace(",", ""))
+
+        self.desired_comments = MAX_COMMENTS if self.desired_comments > MAX_COMMENTS else self.desired_comments
+
+        # Scroll down until desired number of comments are reached
+        while self.desired_comments > len(comments):
+            self.driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
+            time.sleep(3)
+            comments = self.driver.find_elements_by_xpath('//*[@id="content-text"]')
+
+        # Preprocess and save
+        stop_words = stopwords.words('english')
+        tokenizer = RegexpTokenizer(r"\w+(?:[-']\w+)*|'|[-.(]+|\S\w*") # \w - Any character, + - match one or more
+        lemmatizer = WordNetLemmatizer()
+
+        with open('Comments/youtube.txt', 'w') as f:
+            comments = self.clean_comments(comments)
+            for cmt in range(self.desired_comments):
+                comment = comments[cmt]
+                f.write(comment + '\n')
+        self.driver.quit()
 
 
 

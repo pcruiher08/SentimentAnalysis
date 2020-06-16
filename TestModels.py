@@ -26,7 +26,7 @@ def load_tweets():
     return tweets
 
 def load_content(path):
-    text = open(path, "r", encoding="utf8").read().split('\n')
+    text = open(path, "r").read().split('\n')
     random.shuffle(text)
 
     return text
