@@ -1,4 +1,5 @@
 langdetect
+sklearn
 pandas
 selenium
 matplotlib

@@ -1,6 +1,6 @@
 # SentimentAnalysis
 
-Natural language processing python system in charge of categorize comments made in different media as positive or negative. The method used consisted of a voting system between the distinct models to calculate the sentiment analysis.
+A natural language processing system in charge of categorizing comments made in different social media as positive or negative. The method used consisted of a voting system of different models to make sentiment analysis predictions.
 The methods used to classify are:
 - Naive Bayes (NLTK)
 - Bernoulli Naive Bayes (SKLearn)
@@ -39,8 +39,9 @@ keys = {
     "asecret": "xxxxxxxxxxxxxxxxxxxxxx"
 }
 ```
-If you are a windows user after running the requirements you must need to run this for the recognition voice option:
+If you are a windows user after running the requirements you must need to run this for the voice recognition option:
 ```
+pip install pipwin
 pipwin install pyaudio
 ```
 
@@ -77,7 +78,7 @@ You cant get covid19 at Dem / Commie congregations. Hating America is the vaccin
 ![Alt text](example/results/twitter.png?raw=true "Title")
 
 ## Yotube Web Scrapper
-From this social media collects all the comments about the term you choose. It select the must recent video related to the term and collects its comments.
+From this social media collects all the comments about the term you choose. It select the most recent video related to the term and collects its comments.
 
 
 ### Example: 
