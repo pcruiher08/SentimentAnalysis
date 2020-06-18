@@ -10,7 +10,10 @@ The methods used to classify are:
 
 ## Requirements
 Before running the main you must execute the following pip command\
+
+```
 pip install -r requirements.txt
+```
 
 This will install all the required dependencies for the compiler to run:
 - nltk
