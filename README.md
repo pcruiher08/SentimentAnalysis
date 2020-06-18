@@ -109,3 +109,11 @@ insert terms: \
 
 ### Results 
 ![Alt text](example/results/voice.png?raw=true "pyAudio")
+
+
+## Authors
+- [vSebas](https://github.com/vSebas) 
+- [mildredgil](https://github.com/mildredgil) 
+- [pcruiher08](https://github.com/pcruiher08) 
+- [gamezpedro](https://github.com/gamezpedro) 
+- [pcsanchez](https://github.com/pcsanchez) 
