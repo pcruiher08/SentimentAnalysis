@@ -104,8 +104,8 @@ This dependency transcript the audio input of the user. It doesn't need a counte
 ### Example: 
 main.py -m voice
 
-insert terms: 
-hi I am really happy today
+insert terms: \
+*hi I am really happy today*
 
 ### Results 
 ![Alt text](example/results/voice.png?raw=true "pyAudio")
