@@ -76,6 +76,8 @@ You cant get covid19 at Dem / Commie congregations. Hating America is the vaccin
 ## Yotube Web Scrapper
 From this social media collects all the comments about the term you choose. It select the must recent video related to the term and collects its comments.
 
+
+### Example: 
 main.py -m youtube -c 5
 
 insert terms: 
@@ -94,4 +96,13 @@ Montana is up by a 110% because there were like 7 cases daily before
 ![Alt text](example/results/youtube.png?raw=true "youtube")
 
 ## Voice - PyAudio
+This dependency transcript the audio input of the user. It doesn't need a counter parameter as it just analyze it as 1 entry. 
 
+### Example: 
+main.py -m voice
+
+insert terms: 
+hi I am really happy today
+
+### Results 
+![Alt text](example/results/voice.png?raw=true "pyAudio")
