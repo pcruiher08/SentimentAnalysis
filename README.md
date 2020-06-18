@@ -71,5 +71,27 @@ You cant get covid19 at Dem / Commie congregations. Hating America is the vaccin
 ``` 
 
 ### Results 
-![Alt text](example/results/covid.png?raw=true "Title")
+![Alt text](example/results/twitter.png?raw=true "Title")
+
+## Yotube Web Scrapper
+From this social media collects all the comments about the term you choose. It select the must recent video related to the term and collects its comments.
+
+main.py -m youtube -c 5
+
+insert terms: 
+covid19
+
+Comments/youtube.txt
+
+```
+They are literally publishing the same story every 6 hours.
+If you get it, more than likely you'll be fine.
+Nothing 10 thousand protesters standing next to each other can�t fix.
+I think its weird that out of no where when the riots were going on no one talked about covid. And now all of a sudden once riots start going away then covid comes back. Kinda odd
+Montana is up by a 110% because there were like 7 cases daily before
+```
+### Results 
+![Alt text](example/results/youtube.png?raw=true "youtube")
+
+## Voice - PyAudio
 
