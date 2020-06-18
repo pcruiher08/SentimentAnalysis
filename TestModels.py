@@ -1,13 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import nltk
 import pickle
 import random
-
 from nltk.classify.scikitlearn import SklearnClassifier
-
 from sklearn.naive_bayes import BernoulliNB, MultinomialNB
-
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import confusion_matrix, classification_report

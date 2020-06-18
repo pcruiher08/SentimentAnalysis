@@ -2,10 +2,11 @@
 
 Natural language processing python system in charge of categorize comments made in different media as positive or negative. The method used consisted of a voting system between the distinct models to calculate the sentiment analysis.
 The methods used to classify are:
-- Naive Bayes
-- Bernoulli Naive Bayes
-- Multinomial Naive Bayes
-- LogisticRegression
+- Naive Bayes (NLTK)
+- Bernoulli Naive Bayes (SKLearn)
+- Multinomial Naive Bayes (SKLearn)
+- LogisticRegression (SKLearn)
+- Vader
 
 ## Requirements
 Before running the main you must execute the following pip command\
@@ -51,7 +52,7 @@ main.py -m < twitter|youtube|voice > -c 100
 
 
 ## Twitter API - StreamListener
-From this social media collects all the new tweets about the term you choose. It can accept a list of terms. If the terms are trending topics it recollect faster the tweets, if it is not a trending topic it may takes a little more minutes to respond.
+From this social media collects all the new tweets about the term you choose. It can accept a list of terms. If the terms are trending topics it recollects the tweets faster, if it is not a trending topic it may takes a little more minutes to respond.
 
 ### Example: 
 main.py -m twitter -c 50
