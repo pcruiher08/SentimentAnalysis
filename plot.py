@@ -4,6 +4,9 @@ from matplotlib import style
 import time
 
 class Plot( ):
+    """ Draw the plot with the results of the classification. \n
+        For each positive set y with 1, and for negative -1.
+    """
     def __init__(self):
         fig = plt.figure()
         self.ax1 = fig.add_subplot(1,1,1)

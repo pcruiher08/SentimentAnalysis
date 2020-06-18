@@ -10,10 +10,11 @@ import preprocessor as p
 from langdetect import detect
 
 class Tweets( ):
+    """ Handles the Twitter API. """
+    
     def __init__(self, terms, counter):
-        '''
-        OAUTH
-        '''
+        """ Inits API keys and the Stream Listener."""
+        
         CONSUMER_KEY      = keys["ckey"]
         CONSUMER_SECRET   = keys["csecret"]
         OAUTH_TOKEN       = keys["atoken"]
@@ -52,8 +53,10 @@ class MyStreamListener(tweepy.StreamListener):
             return False
 
         try:
+            # Clean tweets from emojis, urls, and special characters
             clean_text = p.clean( status._json["text"] )
 
+            # Accept only english tweets
             if isEnglish ( clean_text ):
                 output = open("Comments/twitter.txt","a")
                 output.write(clean_text)

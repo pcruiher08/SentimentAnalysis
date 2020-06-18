@@ -43,6 +43,7 @@ class Youtube():
             u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
             u"\U00002702-\U000027B0"
             u"\U000024C2-\U0001F251"
+            u"\U0001f914-\U0001f9FF"
             "]+", flags=re.UNICODE)
         return emoji_pattern.sub(r'', string)
 

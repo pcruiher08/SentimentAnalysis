@@ -4,7 +4,7 @@ from Youtube_scraper import Youtube
 import speech_recognition as sr
 
 def initMethod(method, counter):
-    #select twitter, youtube, voice, input file
+    """ Select twitter, youtube, voice, input file, and init."""
     switch = {
         'twitter' : initTwitter,
         'youtube' : initYoutube,
@@ -16,15 +16,17 @@ def initMethod(method, counter):
     methodCall(counter)
 
 def getTerms():
+    """ Ask the user to insert the terms of interest. """
     x = input ("insert terms:")
     return x.split(' ')
 
 def initTwitter(counter):
-    """ Init Twitter API with specified terms and counter """
+    """ Initialize Twitter API with specified terms and counter. """
     t = Tweets(getTerms(), counter)
     runModels("Comments/twitter.txt")
 
 def initYoutube(counter):
+    """ Initialize youtube scrapper. """
     list_terms = getTerms()
     print(list_terms)
     t = Youtube(list_terms, counter)
@@ -32,6 +34,7 @@ def initYoutube(counter):
     runModels("Comments/youtube.txt")
 
 def initVoice(counter):
+    """ Initialize the voice system and save it into a file """
     r = sr.Recognizer()
 
     with sr.Microphone() as source:
@@ -42,7 +45,8 @@ def initVoice(counter):
         output = open('./Comments/voicetext.txt', 'w')
         output.write(t)
         output.close()
-        # runModels("./Comments/voicetext.txt")
+        print(t)
+        runModels("./Comments/voicetext.txt")
     except:
         print('Sorry could not recognize your voice')
 
